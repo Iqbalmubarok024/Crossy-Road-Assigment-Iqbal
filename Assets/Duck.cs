@@ -5,12 +5,8 @@ using DG.Tweening;
 
 public class Duck : MonoBehaviour
 {
-    [SerializeField] bool isMoving;
-    [SerializeField]  float durasi = 0.1f;
-    void Start()
-    {
-        
-    }
+    [SerializeField, Range(0,1)]  float moveDuration;
+    [SerializeField, Range(0,1)]  float jumpHeight;
 
     void Update()
     {
@@ -21,19 +17,19 @@ public class Duck : MonoBehaviour
 
         Vector3 direction = Vector3.zero;
         
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
         {
             direction += Vector3.forward;
         }
-        else if(Input.GetKeyDown(KeyCode.S))
+        else if(Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
         {
             direction += Vector3.back;
         }
-        else if(Input.GetKeyDown(KeyCode.D))
+        else if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
         { 
             direction += Vector3.right;
         }
-        else if(Input.GetKeyDown(KeyCode.A))
+        else if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
         {
             direction += Vector3.left;
         }
@@ -47,6 +43,12 @@ public class Duck : MonoBehaviour
     }
     public void Move(Vector3 direction)
     {
-         transform.DOMove(transform.position + direction, durasi);
-    }
+        transform.DOJump
+        (transform.position + direction,
+         jumpHeight,
+          1,
+           moveDuration);
+
+        transform.forward = direction;
+    }
 }
