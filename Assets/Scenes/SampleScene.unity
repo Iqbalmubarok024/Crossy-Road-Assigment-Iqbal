@@ -762,6 +762,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDuration: 0.1
   jumpHeight: 0.5
+  OnJumpEnd:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1359827135}
+        m_TargetAssemblyTypeName: PlayManager, Assembly-CSharp
+        m_MethodName: UpdateTravelDistance
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &945207355
 GameObject:
   m_ObjectHideFlags: 0
@@ -1166,13 +1181,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e87cbf704102264fa3d91e1d28c2d5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grassPrefab: {fileID: 6448630906001282948, guid: b25fb9fd8a1c4f9428357e455c046fa7, type: 3}
-  roadPrefab: {fileID: 1077070684966032308, guid: 4218863aad2d86b4b8be86e2d8235f28, type: 3}
+  beaver: {fileID: 732971358}
+  terrainsList:
+  - {fileID: 6448630906001282948, guid: b25fb9fd8a1c4f9428357e455c046fa7, type: 3}
+  - {fileID: 1077070684966032308, guid: 4218863aad2d86b4b8be86e2d8235f28, type: 3}
   initialGrassCount: 5
-  horizontalSize: 9
+  horizontalSize: 15
   backViewDistance: -4
   forwardViewDistance: 15
   treeProbability: 0.5
+  travelDistance: 0
 --- !u!4 &1359827136
 Transform:
   m_ObjectHideFlags: 0
