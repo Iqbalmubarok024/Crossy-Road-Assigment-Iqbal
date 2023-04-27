@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class PlayManager : MonoBehaviour
    Dictionary<int,Terrain> activeTerrainDict = new Dictionary<int, Terrain>(20);
     
     [SerializeField] int travelDistance;
+    
+    public UnityEvent<int, int> OnUpdateTerrainLimit;
    private void Start()
    {
     // create initial Grass
@@ -25,46 +28,40 @@ public class PlayManager : MonoBehaviour
         terrain.transform.localPosition = new Vector3(0,0,zPos);
 
         if(terrain is Grass grass)
-        grass.SetTreePercentage(zPos < -1 ? 1 : 0);
+            grass.SetTreePercentage(zPos < -1 ? 1 : 0);
 
         terrain.Generate(horizontalSize);
+        
         activeTerrainDict[zPos] = terrain;
     }
 
     // 
     for (int zPos = initialGrassCount; zPos < forwardViewDistance; zPos++)
     {
-        var terrain = SpawnRandomTerrain(zPos);
-
-
-        terrain.Generate(horizontalSize);
-
-        activeTerrainDict[zPos] = terrain;
+        SpawnRandomTerrain(zPos);
     }
 
-    SpawnRandomTerrain(0);
    }
 
     private Terrain SpawnRandomTerrain(int zPos)
    {
-        Terrain terrainCheck = null;
+        Terrain comparatorTerrain = null;
         int randomIndex;
-        Terrain terrain = null;
-        
         for (int z = -1; z >= -3; z--)
         {
             var checkPos = zPos + z;
-            if (terrainCheck == null)
+            System.Type comparatorType = comparatorTerrain.GetType();
+            System.Type checkType = activeTerrainDict[checkPos].GetType();
+
+            if (comparatorTerrain == null)
             {
-                terrainCheck = activeTerrainDict[checkPos];
+                comparatorTerrain = activeTerrainDict[checkPos];
                 continue;
             }
-            else if(terrainCheck.GetType() != activeTerrainDict[checkPos].GetType())
+            else if (comparatorType != checkType)
             {
                 randomIndex = Random.Range(0,terrainsList.Count);
-                terrain = Instantiate(terrainsList[randomIndex]);
-                terrain.transform.localPosition = new Vector3(0,0,zPos);
-                return terrain;
+                return SpawnTerrain(terrainsList[randomIndex],zPos);
 
             }
             else
@@ -76,7 +73,9 @@ public class PlayManager : MonoBehaviour
         var CandidateTerrain = new List<Terrain>(terrainsList);
         for (int i = 0; i < CandidateTerrain.Count; i++)
         {
-            if(terrainCheck.GetType() == CandidateTerrain[i].GetType())
+            System.Type comparatorType = comparatorTerrain.GetType();
+            System.Type checkType = activeTerrainDict[i].GetType();
+            if(comparatorTerrain.GetType() == CandidateTerrain[i].GetType())
             {
                 CandidateTerrain.Remove(CandidateTerrain[i]);
                 break;
@@ -84,23 +83,37 @@ public class PlayManager : MonoBehaviour
         }
 
          randomIndex = Random.Range(0,CandidateTerrain.Count);
-         terrain = Instantiate(CandidateTerrain[randomIndex]);
-         terrain.transform.position = new Vector3(0,0,zPos);
-            return terrain;
+        return SpawnTerrain(CandidateTerrain[randomIndex],zPos);
    }
 
-   private void Update()
+   public Terrain SpawnTerrain(Terrain terrain, int zPos)
    {
-        if(beaver.transform.position.z > travelDistance)
-        {
-            travelDistance = Mathf.CeilToInt(beaver.transform.position.z);
-        }
+       terrain = Instantiate(terrain);
+         terrain.transform.position = new Vector3(0,0,zPos);
+        terrain.Generate(horizontalSize);
+        activeTerrainDict[zPos] = terrain;
+        return terrain; 
    }
+
+
    public void UpdateTravelDistance(Vector3 targetPosition)
    {
     if(targetPosition.z > travelDistance)
     {
         travelDistance = Mathf.CeilToInt(targetPosition.z);
+        UpdateTerrain();
     }
+   }
+
+   public void UpdateTerrain()
+   {
+        var destroyPos = travelDistance - 1 + backViewDistance;
+        Destroy(activeTerrainDict[destroyPos].gameObject);
+        activeTerrainDict.Remove(destroyPos);
+
+        var spawnPosition = travelDistance - 1 + forwardViewDistance;
+        SpawnRandomTerrain(spawnPosition);
+
+        OnUpdateTerrainLimit.Invoke(horizontalSize,travelDistance + backViewDistance);
    }
 }
