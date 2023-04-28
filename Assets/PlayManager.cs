@@ -11,7 +11,6 @@ public class PlayManager : MonoBehaviour
    [SerializeField] int horizontalSize;
    [SerializeField] int backViewDistance = -4;
    [SerializeField] int forwardViewDistance = 15;
-   [SerializeField, Range(0,1)] float treeProbability;
    
    Dictionary<int,Terrain> activeTerrainDict = new Dictionary<int, Terrain>(20);
     
@@ -41,6 +40,7 @@ public class PlayManager : MonoBehaviour
         SpawnRandomTerrain(zPos);
     }
 
+    OnUpdateTerrainLimit.Invoke(horizontalSize,travelDistance + backViewDistance);
    }
 
     private Terrain SpawnRandomTerrain(int zPos)
@@ -50,15 +50,13 @@ public class PlayManager : MonoBehaviour
         for (int z = -1; z >= -3; z--)
         {
             var checkPos = zPos + z;
-            System.Type comparatorType = comparatorTerrain.GetType();
-            System.Type checkType = activeTerrainDict[checkPos].GetType();
 
             if (comparatorTerrain == null)
             {
                 comparatorTerrain = activeTerrainDict[checkPos];
                 continue;
             }
-            else if (comparatorType != checkType)
+            else if (comparatorTerrain.GetType() != activeTerrainDict[checkPos].GetType())
             {
                 randomIndex = Random.Range(0,terrainsList.Count);
                 return SpawnTerrain(terrainsList[randomIndex],zPos);
@@ -73,8 +71,6 @@ public class PlayManager : MonoBehaviour
         var CandidateTerrain = new List<Terrain>(terrainsList);
         for (int i = 0; i < CandidateTerrain.Count; i++)
         {
-            System.Type comparatorType = comparatorTerrain.GetType();
-            System.Type checkType = activeTerrainDict[i].GetType();
             if(comparatorTerrain.GetType() == CandidateTerrain[i].GetType())
             {
                 CandidateTerrain.Remove(CandidateTerrain[i]);
