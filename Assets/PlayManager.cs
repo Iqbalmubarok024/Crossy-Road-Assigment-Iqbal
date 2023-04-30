@@ -12,6 +12,7 @@ public class PlayManager : MonoBehaviour
    [SerializeField] int horizontalSize;
    [SerializeField] int backViewDistance = -4;
    [SerializeField] int forwardViewDistance = 15;
+   [SerializeField] float initialTimer = 10;
    
    Dictionary<int,Terrain> activeTerrainDict = new Dictionary<int, Terrain>(20);
     
@@ -20,6 +21,7 @@ public class PlayManager : MonoBehaviour
 
     public UnityEvent<int, int> OnUpdateTerrainLimit;
     public UnityEvent<int> OnScoreUpdate;
+    public UnityEvent OnTimesUp;
    private void Start()
    {
     // create initial Grass
@@ -44,7 +46,9 @@ public class PlayManager : MonoBehaviour
     }
 
     OnUpdateTerrainLimit.Invoke(horizontalSize,travelDistance + backViewDistance);
+
    }
+
 
     private Terrain SpawnRandomTerrain(int zPos)
    {

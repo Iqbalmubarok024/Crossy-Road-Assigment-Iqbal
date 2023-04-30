@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Ufo : MonoBehaviour
 {
-    [SerializeField, Range(0,10)] float speed;
+    [SerializeField, Range(0,50)] float speed = 25;
     void Update()
     {
         transform.Translate(Vector3.forward*speed*Time.deltaTime);
