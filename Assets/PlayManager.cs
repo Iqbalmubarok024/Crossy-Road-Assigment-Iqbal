@@ -21,7 +21,6 @@ public class PlayManager : MonoBehaviour
 
     public UnityEvent<int, int> OnUpdateTerrainLimit;
     public UnityEvent<int> OnScoreUpdate;
-    public UnityEvent OnTimesUp;
    private void Start()
    {
     // create initial Grass

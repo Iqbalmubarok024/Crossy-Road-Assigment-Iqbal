@@ -18,13 +18,12 @@ public class Duck : MonoBehaviour
     private bool isMoveable = false;
     void Update()
     {
-        if (isMoveable)
+        if (isMoveable == false)
             return;
 
         if (DOTween.IsTweening(transform))
-        {
             return;
-        }
+        
 
         Vector3 direction = Vector3.zero;
         
@@ -94,12 +93,12 @@ public class Duck : MonoBehaviour
     {
         if(other.CompareTag("Car"))
         {
-            if(isMoveable == true)
+            if(transform.localScale.y == 0.1f)
                 return;
 
             transform.DOScaleY(0.1f,0.2f);
             
-            isMoveable = true;
+            isMoveable = false;
             Invoke("Die",3);
         }
 
