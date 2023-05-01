@@ -18,7 +18,7 @@ public class Duck : MonoBehaviour
     private bool isMoveable = false;
     void Update()
     {
-        if (isMoveable == false)
+        if (isMoveable == true)
             return;
 
         if (DOTween.IsTweening(transform))
@@ -98,7 +98,7 @@ public class Duck : MonoBehaviour
 
             transform.DOScaleY(0.1f,0.2f);
             
-            isMoveable = false;
+            isMoveable = true;
             Invoke("Die",3);
         }
 
