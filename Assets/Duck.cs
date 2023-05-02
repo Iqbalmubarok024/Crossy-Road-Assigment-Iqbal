@@ -14,11 +14,12 @@ public class Duck : MonoBehaviour
 
     public UnityEvent<Vector3> OnJumpEnd;
     public UnityEvent<int> OnGetCoin;
+    public UnityEvent OnCarCollution;
     public UnityEvent OnDie;
     private bool isMoveable = false;
     void Update()
     {
-        if (isMoveable == true)
+        if (isMoveable == false)
             return;
 
         if (DOTween.IsTweening(transform))
@@ -96,9 +97,10 @@ public class Duck : MonoBehaviour
             if(transform.localScale.y == 0.1f)
                 return;
 
-            transform.DOScaleY(0.1f,0.2f);
+            transform.DOScale(new Vector3 (2,0.1f,2), 0.2f);
             
-            isMoveable = true;
+            isMoveable = false;
+            OnCarCollution.Invoke();
             Invoke("Die",3);
         }
 
