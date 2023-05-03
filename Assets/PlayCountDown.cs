@@ -41,5 +41,6 @@ public class PlayCountDown : MonoBehaviour
                 tmpText.text = "Go";
                 OnEnd.Invoke();
             }));
+            
     }
 }
