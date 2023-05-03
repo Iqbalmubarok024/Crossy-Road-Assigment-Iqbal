@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class menu : MonoBehaviour
 {
+    public void Replay()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 
 	public void GantiScene(string scene_name)
 	{
