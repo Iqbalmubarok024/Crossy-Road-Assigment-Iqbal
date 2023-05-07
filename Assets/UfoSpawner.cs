@@ -10,6 +10,8 @@ public class UfoSpawner : MonoBehaviour
 
     float timer;
     // Start is called before the first frame update
+
+
     void Start()
     {
         timer = initialTimer;
