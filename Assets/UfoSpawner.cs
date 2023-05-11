@@ -22,11 +22,13 @@ public class UfoSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (timer<=0 && ufo.gameObject.activeInHierarchy == false)
-            {
-                ufo.gameObject.SetActive(true);
-                ufo.transform.position = beaver.transform.position + new Vector3(0,0,20);
-            }
+        if (Duck.isGameOver) return;
+        if (timer <= 0 && ufo.gameObject.activeInHierarchy == false)
+        {
+            var posPlayer = beaver.transform.position;
+            ufo.gameObject.SetActive(true);
+            ufo.transform.position = posPlayer + Vector3.forward * 20f;
+        }
         timer -= Time.deltaTime;
     }
 
